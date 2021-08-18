@@ -1,6 +1,9 @@
 package proyecto_2d_parcial;
 
 import ai.MiniMax;
+import static ai.MiniMax.P;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
@@ -49,7 +52,11 @@ public class Proyecto_2d_parcial extends Application {
             this.setOnMouseClicked(e -> {
                 if (!board.isCrossTurn()) {
                     board.placeMark(this.row, this.col);
-                    this.update();
+                    try {
+                        this.update();
+                    } catch (CloneNotSupportedException ex) {
+                        Logger.getLogger(Proyecto_2d_parcial.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             });
             this.setStyle("-fx-font-size:70");
@@ -62,9 +69,24 @@ public class Proyecto_2d_parcial extends Application {
          * Retrieves state of tile from board which has the corresponding row 
          * and column coordinate and updates this object's text field with it.
          */
-        public void update() {
+        public void update() throws CloneNotSupportedException{
             this.mark = board.getMarkAt(this.row, this.col);
             this.setText("" + mark);
+            
+            // SUGERENCIA DE MOVIMIENTO PARA EL HUMANO 
+            // CALCULO DE UTULIDAD PARA CADA JUGADOR
+            if(board.isCrossTurn()){
+                System.out.println("Turno de la máquina");
+            }else{
+                System.out.println("Turno del humano");
+                System.out.println("Mejor jugada para el humano");
+                MiniMax move = new MiniMax(board);
+                int row = move.getRow()+1;
+                int col = move.getCol()+1;
+                System.out.println("fila: "+row+"  columna: "+col);
+            }
+            System.out.println("Ux:"+(P(board, Mark.X)-P(board, Mark.O))+"   Uo:"+(P(board, Mark.O)-P(board, Mark.X)));
+            System.out.println("");
         }
     }
 
@@ -73,7 +95,7 @@ public class Proyecto_2d_parcial extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) {        
         root = new BorderPane();
 
         root.setCenter(generateGUI());
@@ -133,9 +155,14 @@ public class Proyecto_2d_parcial extends Application {
                     endGame();
                 } else {
                     if (board.isCrossTurn()) {
-                        playAI();
+                        try {
+                            playAI();
+                        } catch (CloneNotSupportedException ex) {
+                            Logger.getLogger(Proyecto_2d_parcial.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                 }
+                
             }
         };
         gameTimer.start();
@@ -145,14 +172,14 @@ public class Proyecto_2d_parcial extends Application {
      * Analyses the current state of the board and plays the move best for the X
      * player. Updates the tile it places a mark on also.
      */
-    private static void playAI() {
-        int[] move = MiniMax.getBestMove(board);
-        int row = move[0];
-        int col = move[1];
+    private static void playAI() throws CloneNotSupportedException {
+        MiniMax move = new MiniMax(board);
+        int row = move.getRow();
+        int col = move.getCol();
         board.placeMark(row, col);
         for (Node child : gameBoard.getChildren()) {
             if (GridPane.getRowIndex(child) == row
-                    && GridPane.getColumnIndex(child) == col) {
+             && GridPane.getColumnIndex(child) == col) {
                 Tile t = (Tile) child;
                 t.update();
                 return;

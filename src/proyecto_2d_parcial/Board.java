@@ -1,4 +1,3 @@
-
 package proyecto_2d_parcial;
 
 import static proyecto_2d_parcial.Mark.BLANK;
@@ -9,22 +8,37 @@ import static proyecto_2d_parcial.Mark.X;
  *
  * @author Joao
  */
-public class Board {
+public class Board implements Cloneable{
     private boolean crossTurn, gameOver;
-    private final Mark[][] board;
+    private Mark[][] board;
     private Mark marcaGanadora;
     //Tamaño del juego, en este caso 3x3
     private final int LADO_TABLERO = 3;
     private int movimientosDisponibles = LADO_TABLERO * LADO_TABLERO;
-
+    private int utility;
+    
     public Board() {
         board = new Mark[LADO_TABLERO][LADO_TABLERO];
         crossTurn = true;
         gameOver = false;
         marcaGanadora = BLANK;
+        utility = 0;
         initialiseBoard();
     }
-
+    
+    public Board(Board board){
+        this(board.getBoard(), board.isCrossTurn(), board.getMovDisp());
+    }
+    
+    public Board(Mark[][] board, boolean crossTurn, int movimientosDisponibles){
+        this.board = board;
+        this.crossTurn = crossTurn;
+        this.movimientosDisponibles = movimientosDisponibles;
+        gameOver = false;
+        marcaGanadora = BLANK;
+        utility = 0;
+    }
+    
     private void initialiseBoard() {
         for (int row = 0; row < LADO_TABLERO; row++) {
             for (int col = 0; col < LADO_TABLERO; col++) {
@@ -32,6 +46,11 @@ public class Board {
             }
         }
     }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone(); //To change body of generated methods, choose Tools | Templates.
+    }    
 
     /**
      * Attempt to mark tile at the given coordinates if they are valid and it is
@@ -51,6 +70,16 @@ public class Board {
         board[row][col] = crossTurn ? X : O;
         togglePlayer();
         checkWin(row, col);
+        return true;
+    }
+    
+    public boolean eraseMark(int row, int col) {
+        if (row < 0 || row >= LADO_TABLERO || col < 0 || col >= LADO_TABLERO
+                || !isTileMarked(row, col) || gameOver) {
+            return false;
+        }
+        movimientosDisponibles++;
+        board[row][col] = BLANK;
         return true;
     }
 
@@ -135,7 +164,6 @@ public class Board {
         crossTurn = !crossTurn;
     }
 
-    
     public boolean anyMovesAvailable() {
         return movimientosDisponibles > 0;
     }
@@ -178,5 +206,21 @@ public class Board {
 
     public Mark getWinningMark() {
         return marcaGanadora;
+    }
+
+    public int getUtility() {
+        return utility;
+    }
+
+    public void setUtility(int u) {
+        utility = u;
+    }
+    
+    public Mark[][] getBoard(){
+        return board;
+    }
+    
+    public int getMovDisp(){
+        return movimientosDisponibles;
     }
 }
