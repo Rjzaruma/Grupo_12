@@ -1,0 +1,14 @@
+edu\espol\grupo_12\App.class
+edu\espol\grupo_12\Mark.class
+edu\espol\grupo_12\PLogInController.class
+edu\espol\grupo_12\PGameController.class
+edu\espol\grupo_12\Board.class
+edu\espol\grupo_12\PRegistroController.class
+edu\espol\grupo_12\Player.class
+module-info.class
+edu\espol\grupo_12\PInicioController.class
+tree\MPTree.class
+edu\espol\grupo_12\PGameController$1.class
+ai\MiniMax.class
+tree\MPNode.class
+edu\espol\grupo_12\Celda.class
