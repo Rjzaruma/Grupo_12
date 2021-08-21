@@ -11,12 +11,13 @@ import java.util.ResourceBundle;
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
 
 /**
  * FXML Controller class
@@ -30,13 +31,14 @@ public class PGameController implements Initializable {
     private AnimationTimer gameTimer;
     @FXML
     private BorderPane borderPane;
+    @FXML
+    private Label lblInformacion;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-//        gridPanePrincipal.add(generateGridPaneGame(), 1, 1);
         borderPane.setCenter(generateGridPaneGame());
         runGameLoop();
     }    
@@ -51,6 +53,9 @@ public class PGameController implements Initializable {
                 gameBoard.getChildren().add(celda);
             }
         }
+        if(PInicioController.firstPc == false){
+            boardPlaying.playPlayer();
+        }
         gameBoard.setStyle("-fx-background-color: white; -fx-grid-lines-visible: true");
         return gameBoard;
     }
@@ -58,24 +63,32 @@ public class PGameController implements Initializable {
      * Runs the main game loop which is responsible for playing the AI's turn 
      * as long as the game is still ongoing.
      */
+    private void informacionActual(){
+        if(boardPlaying.isCrossTurn()){ //si es verdadero juego la maquina
+            lblInformacion.setText("Jugador: "+App.PlayerPlaying.getUsuario()+"\n"+"Turno: Maquina");
+        }else{
+            lblInformacion.setText("Jugador: "+App.PlayerPlaying.getUsuario()+"\n"+"Turno: Jugador");
+        }
+        lblInformacion.setFont(new Font("Times New Roman Bold", 20));
+    }
     private void runGameLoop() {
+        informacionActual();
         gameTimer = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                if (boardPlaying.isGameOver()) {
-                    endGame();
-                } else {
-                    if (boardPlaying.isCrossTurn()) {
-                        try {
-                            playAI();
-                        } catch (CloneNotSupportedException ex) {
-                            System.out.println(ex);
-//                            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+        @Override
+        public void handle(long now) {
+            if (boardPlaying.isGameOver()) {
+                endGame();
+            } else {
+                if (boardPlaying.isCrossTurn()) {
+                    try {
+                        playAI();
+                    } catch (CloneNotSupportedException ex) {
+                        System.out.println(ex);
                     }
                 }
-                
             }
+
+        }
         };
         gameTimer.start();
     }
@@ -99,9 +112,7 @@ public class PGameController implements Initializable {
     }
 
     private void resetGame() {
-//        gridPanePrincipal.getChildren().clear();
         borderPane.setCenter(generateGridPaneGame());
-//        gridPanePrincipal.add(generateGridPaneGame(), 1, 1);
         runGameLoop();
     }
 

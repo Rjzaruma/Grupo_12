@@ -10,7 +10,6 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.espol.grupo_12.PLogInController">
    <center>
       <GridPane BorderPane.alignment="CENTER">
@@ -41,7 +40,7 @@
             <TextField fx:id="txtUserName" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             <PasswordField fx:id="txtPassword" GridPane.columnIndex="2" GridPane.rowIndex="2" />
             <Button mnemonicParsing="false" onAction="#sceneRegistro" text="Register" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Button mnemonicParsing="false" onAction="#sceneInicio" text="LogIn" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <Button defaultButton="true" mnemonicParsing="false" onAction="#sceneInicio" text="LogIn" underline="true" GridPane.columnIndex="2" GridPane.rowIndex="3" />
          </children>
       </GridPane>
    </center>

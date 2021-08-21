@@ -71,7 +71,17 @@ public class Board implements Cloneable{
             return false;
         }
         movimientosDisponibles--;
-        board[row][col] = crossTurn ? X : O;
+//        board[row][col] = crossTurn ? X : O;
+        if(PInicioController.xPlayer && !crossTurn){
+            board[row][col] = X;
+        }else if (!PInicioController.xPlayer && !crossTurn){
+            board[row][col] = O;
+        }else if (PInicioController.xPlayer && crossTurn){
+            board[row][col] = O;
+        }else if (!PInicioController.xPlayer && crossTurn){
+            board[row][col] = X;
+        }
+        
         togglePlayer();
         checkWin(row, col);
         return true;
@@ -163,7 +173,10 @@ public class Board implements Cloneable{
         }
         return BLANK;
     }
-
+    
+    public void playPlayer(){
+        crossTurn = false;
+    }
     private void togglePlayer() {
         crossTurn = !crossTurn;
     }
