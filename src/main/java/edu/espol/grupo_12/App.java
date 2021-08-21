@@ -18,6 +18,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("PLogIn"), 1080, 720);
+        stage.setTitle("Tic, Tac, Toe // Tres en raya // Tatetí");
         stage.setScene(scene);
         stage.show();
     }

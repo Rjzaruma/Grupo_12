@@ -34,7 +34,6 @@ public final class Celda extends Button {
                     this.update();
                 } catch (CloneNotSupportedException ex) {
                     System.out.println(ex);
-//                    Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });

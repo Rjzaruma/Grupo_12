@@ -25,7 +25,9 @@ import javafx.scene.text.Font;
  * @author josue
  */
 public class PInicioController implements Initializable {
-
+    public static int rondasGanadasPC;
+    public static int rondasGanadasPlayer;
+    public static int rondasParaGanar;
     public static boolean firstPc;
     public static boolean xPlayer;
     @FXML
@@ -38,6 +40,8 @@ public class PInicioController implements Initializable {
     private RadioButton playPc;
     @FXML
     private ComboBox<String> comboBox;
+    @FXML
+    private ComboBox<Integer> comboBoxRondas;
 
     /**
      * Initializes the controller class.
@@ -48,6 +52,8 @@ public class PInicioController implements Initializable {
         lblInfo.setFont(new Font("Times New Roman Bold", 40));
         ObservableList<String> Marcas  = FXCollections.observableArrayList("X","O");
         comboBox.setItems(Marcas);
+        ObservableList<Integer> rondas  = FXCollections.observableArrayList(1,3,5);
+        comboBoxRondas.setItems(rondas);
     }    
     
     @FXML
@@ -57,7 +63,7 @@ public class PInicioController implements Initializable {
         }else if(movimiento.getSelectedToggle().equals(playPlayer)){
             firstPc = false;
         }
-        if(comboBox.getValue()==null){
+        if(comboBox.getValue()==null || comboBoxRondas.getValue()==null){
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setHeaderText(null);
             alert.setTitle("Informacion Invalida");
@@ -69,6 +75,9 @@ public class PInicioController implements Initializable {
             }else if(comboBox.getValue().equals("O")){
                 xPlayer = false;
             }
+            rondasGanadasPC = 0;
+            rondasGanadasPlayer = 0;
+            rondasParaGanar = comboBoxRondas.getValue();
             App.setRoot("PGame");
         }
     }

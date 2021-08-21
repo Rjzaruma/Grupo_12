@@ -6,6 +6,7 @@
 package edu.espol.grupo_12;
 
 import ai.MiniMax;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.animation.AnimationTimer;
@@ -33,10 +34,7 @@ public class PGameController implements Initializable {
     private BorderPane borderPane;
     @FXML
     private Label lblInformacion;
-
-    /**
-     * Initializes the controller class.
-     */
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         borderPane.setCenter(generateGridPaneGame());
@@ -59,15 +57,14 @@ public class PGameController implements Initializable {
         gameBoard.setStyle("-fx-background-color: white; -fx-grid-lines-visible: true");
         return gameBoard;
     }
-    /**
-     * Runs the main game loop which is responsible for playing the AI's turn 
-     * as long as the game is still ongoing.
-     */
+    
     private void informacionActual(){
-        if(boardPlaying.isCrossTurn()){ //si es verdadero juego la maquina
-            lblInformacion.setText("Jugador: "+App.PlayerPlaying.getUsuario()+"\n"+"Turno: Maquina");
+        if(boardPlaying.isCrossTurn()){ //si es verdadero juega la maquina
+            lblInformacion.setText("Jugador: "+App.PlayerPlaying.getUsuario()+"\n"+"Rondas para ganar: "+String.valueOf(PInicioController.rondasParaGanar)+"\n"+"Turno: Maquina"+"\n"+"Rondas Ganadas:"+"\n"+"PC: "+String.valueOf(PInicioController.rondasGanadasPC)
+            +"\n"+"Jugador: "+String.valueOf(PInicioController.rondasGanadasPlayer));
         }else{
-            lblInformacion.setText("Jugador: "+App.PlayerPlaying.getUsuario()+"\n"+"Turno: Jugador");
+            lblInformacion.setText("Jugador: "+App.PlayerPlaying.getUsuario()+"\n"+"Rondas para ganar: "+String.valueOf(PInicioController.rondasParaGanar)+"\n"+"Turno: Jugador"+"\n"+"Rondas Ganadas:"+"\n"+"PC: "+String.valueOf(PInicioController.rondasGanadasPC)
+            +"\n"+"Jugador: "+String.valueOf(PInicioController.rondasGanadasPlayer));
         }
         lblInformacion.setFont(new Font("Times New Roman Bold", 20));
     }
@@ -77,7 +74,11 @@ public class PGameController implements Initializable {
         @Override
         public void handle(long now) {
             if (boardPlaying.isGameOver()) {
-                endGame();
+                try {
+                    endGame();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
             } else {
                 if (boardPlaying.isCrossTurn()) {
                     try {
@@ -87,16 +88,11 @@ public class PGameController implements Initializable {
                     }
                 }
             }
-
         }
         };
         gameTimer.start();
     }
 
-    /**
-     * Analyses the current state of the board and plays the move best for the X
-     * player. Updates the tile it places a mark on also.
-     */
     private static void playAI() throws CloneNotSupportedException {
         MiniMax move = new MiniMax(boardPlaying);
         int row = move.getRow();
@@ -115,13 +111,10 @@ public class PGameController implements Initializable {
         borderPane.setCenter(generateGridPaneGame());
         runGameLoop();
     }
-
-    /**
-     * Stops the game loop and displays the result of the game.
-     */
-    private void endGame() {
+    
+    private void endGame() throws IOException {
         gameTimer.stop();
-        Alert gameOverAlert = new Alert(Alert.AlertType.INFORMATION, "", new ButtonType("New Game"));
+        Alert gameOverAlert = new Alert(Alert.AlertType.INFORMATION, "", new ButtonType("Siguiente Ronda"));
         Mark winner = boardPlaying.getWinningMark();
 
         gameOverAlert.setTitle("Game Over");
@@ -130,12 +123,38 @@ public class PGameController implements Initializable {
             gameOverAlert.setContentText("Draw!");
         } else {
             gameOverAlert.setContentText(winner + " wins!");
+            if(PInicioController.xPlayer && winner == Mark.X){
+                PInicioController.rondasGanadasPlayer+=1;
+            }else if(!PInicioController.xPlayer && winner == Mark.X){
+                PInicioController.rondasGanadasPC+=1;
+            }else if(!PInicioController.xPlayer && winner == Mark.O){
+                PInicioController.rondasGanadasPlayer+=1;
+            }else if(PInicioController.xPlayer && winner == Mark.O){
+                PInicioController.rondasGanadasPC+=1;
+            }
         }
         gameOverAlert.setOnHidden(e -> {
             gameOverAlert.close();
             resetGame();
         });
-        gameOverAlert.show();
+        if(PInicioController.rondasParaGanar==PInicioController.rondasGanadasPC || PInicioController.rondasParaGanar==PInicioController.rondasGanadasPlayer){
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText(null);
+            alert.setTitle("Hay un ganador!");
+            if(PInicioController.xPlayer && winner == Mark.X){
+                alert.setContentText(App.PlayerPlaying.getUsuario()+" has ganado!");
+            }else if(!PInicioController.xPlayer && winner == Mark.X){
+                alert.setContentText("Ha ganado la máquina):\n"+" Suerte para la proxima!");
+            }else if(!PInicioController.xPlayer && winner == Mark.O){
+                alert.setContentText(App.PlayerPlaying.getUsuario()+"has ganado!");
+            }else if(PInicioController.xPlayer && winner == Mark.O){
+                alert.setContentText("Ha ganado la máquina):\n"+"Suerte para la proxima!");
+            }
+            alert.show();
+            App.setRoot("PInicio");
+        }else{
+            gameOverAlert.show();
+        }
     }
 }
 
