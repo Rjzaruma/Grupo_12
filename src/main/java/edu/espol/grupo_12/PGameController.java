@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.espol.grupo_12;
 
 import ai.MiniMax;
@@ -20,13 +15,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 
-/**
- * FXML Controller class
- *
- * @author josue
- */
 public class PGameController implements Initializable {
-    
     private static GridPane gameBoard;
     public static Board boardPlaying;
     private AnimationTimer gameTimer;
@@ -44,6 +33,8 @@ public class PGameController implements Initializable {
     private static GridPane generateGridPaneGame() {
         gameBoard = new GridPane();
         boardPlaying = new Board();
+        boardPlaying.setMarcaAi(PInicioController.Ai);
+        boardPlaying.setMarcaPlayer(PInicioController.Player);
         for (int row = 0; row < boardPlaying.getWidth(); row++) {
             for (int col = 0; col < boardPlaying.getWidth(); col++) {
                 Celda celda = new Celda(row, col, boardPlaying.getMarkAt(row, col));
@@ -51,15 +42,17 @@ public class PGameController implements Initializable {
                 gameBoard.getChildren().add(celda);
             }
         }
+        // por defecto empezamos con el turno de la pc
+        // pero si elegimos lo contrario en el menú, cambiamos de jugador
         if(PInicioController.firstPc == false){
-            boardPlaying.playPlayer();
+            boardPlaying.togglePlayer();
         }
         gameBoard.setStyle("-fx-background-color: white; -fx-grid-lines-visible: true");
         return gameBoard;
     }
     
     private void informacionActual(){
-        if(boardPlaying.isCrossTurn()){ //si es verdadero juega la maquina
+        if(boardPlaying.isAiTurn()){ //si es verdadero juega la maquina
             lblInformacion.setText("Jugador: "+App.PlayerPlaying.getUsuario()+"\n"+"Rondas para ganar: "+String.valueOf(PInicioController.rondasParaGanar)+"\n"+"Turno: Maquina"+"\n"+"Rondas Ganadas:"+"\n"+"PC: "+String.valueOf(PInicioController.rondasGanadasPC)
             +"\n"+"Jugador: "+String.valueOf(PInicioController.rondasGanadasPlayer));
         }else{
@@ -76,16 +69,10 @@ public class PGameController implements Initializable {
             if (boardPlaying.isGameOver()) {
                 try {
                     endGame();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
+                } catch (IOException ex){}
             } else {
-                if (boardPlaying.isCrossTurn()) {
-                    try {
-                        playAI();
-                    } catch (CloneNotSupportedException ex) {
-                        System.out.println(ex);
-                    }
+                if (boardPlaying.isAiTurn()) {
+                    playAI();
                 }
             }
         }
@@ -93,7 +80,7 @@ public class PGameController implements Initializable {
         gameTimer.start();
     }
 
-    private static void playAI() throws CloneNotSupportedException {
+    private static void playAI(){
         MiniMax move = new MiniMax(boardPlaying);
         int row = move.getRow();
         int col = move.getCol();
@@ -123,13 +110,13 @@ public class PGameController implements Initializable {
             gameOverAlert.setContentText("Draw!");
         } else {
             gameOverAlert.setContentText(winner + " wins!");
-            if(PInicioController.xPlayer && winner == Mark.X){
+            if(PInicioController.Player==Mark.X && winner == Mark.X){
                 PInicioController.rondasGanadasPlayer+=1;
-            }else if(!PInicioController.xPlayer && winner == Mark.X){
+            }else if(PInicioController.Player!=Mark.X && winner == Mark.X){
                 PInicioController.rondasGanadasPC+=1;
-            }else if(!PInicioController.xPlayer && winner == Mark.O){
+            }else if(PInicioController.Player==Mark.O && winner == Mark.O){
                 PInicioController.rondasGanadasPlayer+=1;
-            }else if(PInicioController.xPlayer && winner == Mark.O){
+            }else if(PInicioController.Player!=Mark.O && winner == Mark.O){
                 PInicioController.rondasGanadasPC+=1;
             }
         }
@@ -141,13 +128,13 @@ public class PGameController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText(null);
             alert.setTitle("Hay un ganador!");
-            if(PInicioController.xPlayer && winner == Mark.X){
+            if(PInicioController.Player==Mark.X && winner == Mark.X){
                 alert.setContentText(App.PlayerPlaying.getUsuario()+" has ganado!");
-            }else if(!PInicioController.xPlayer && winner == Mark.X){
+            }else if(PInicioController.Player!=Mark.X && winner == Mark.X){
                 alert.setContentText("Ha ganado la máquina):\n"+" Suerte para la proxima!");
-            }else if(!PInicioController.xPlayer && winner == Mark.O){
+            }else if(PInicioController.Player==Mark.O && winner == Mark.O){
                 alert.setContentText(App.PlayerPlaying.getUsuario()+"has ganado!");
-            }else if(PInicioController.xPlayer && winner == Mark.O){
+            }else if(PInicioController.Player!=Mark.O&& winner == Mark.O){
                 alert.setContentText("Ha ganado la máquina):\n"+"Suerte para la proxima!");
             }
             alert.show();

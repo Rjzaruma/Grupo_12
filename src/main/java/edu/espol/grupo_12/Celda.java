@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.espol.grupo_12;
 
 import ai.MiniMax;
@@ -10,13 +5,9 @@ import static ai.MiniMax.P;
 import javafx.scene.control.Button;
 import javafx.scene.text.TextAlignment;
 
-/**
- *
- * @author josue
- */
 public final class Celda extends Button {
-    private final int row;
-    private final int col;
+    private int row;
+    private int col;
     private Mark mark;
 
     public Celda(int initRow, int initCol, Mark initMark) {
@@ -28,13 +19,9 @@ public final class Celda extends Button {
 
     private void initialiseTile() {
         this.setOnMouseClicked(e -> {
-            if (!PGameController.boardPlaying.isCrossTurn()) {
+            if (!PGameController.boardPlaying.isAiTurn()) {
                 PGameController.boardPlaying.placeMark(this.row, this.col);
-                try {
-                    this.update();
-                } catch (CloneNotSupportedException ex) {
-                    System.out.println(ex);
-                }
+                this.update();
             }
         });
         this.setStyle("-fx-font-size:70");
@@ -43,21 +30,22 @@ public final class Celda extends Button {
         this.setText("" + this.mark);
     }
     
-    public void update() throws CloneNotSupportedException{
+    public void update(){
         this.mark = PGameController.boardPlaying.getMarkAt(this.row, this.col);
-        this.setText("" + mark);
+        this.setText("" + mark);   
 
         // SUGERENCIA DE MOVIMIENTO PARA EL HUMANO 
         // CALCULO DE UTULIDAD PARA CADA JUGADOR
-        if(PGameController.boardPlaying.isCrossTurn()){
+        if(PGameController.boardPlaying.isAiTurn()){
             System.out.println("Turno de la máquina");
         }else{
             System.out.println("Turno del humano");
             System.out.println("Mejor jugada para el humano");
             MiniMax move = new MiniMax(PGameController.boardPlaying);
-            int row = move.getRow()+1;
-            int col = move.getCol()+1;
-            System.out.println("fila: "+row+"  columna: "+col);
+            int r = move.getRow()+1;
+            int c = move.getCol()+1;
+            System.out.print(move.getBoard());
+            System.out.println("fila: "+r+"  columna: "+c);
         }
         System.out.println("Ux:"+(P(PGameController.boardPlaying, Mark.X)-P(PGameController.boardPlaying, Mark.O))+"   Uo:"+(P(PGameController.boardPlaying, Mark.O)-P(PGameController.boardPlaying, Mark.X)));
         System.out.println("");

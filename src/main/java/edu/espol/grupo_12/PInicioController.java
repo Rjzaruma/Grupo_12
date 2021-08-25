@@ -1,10 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.espol.grupo_12;
 
+import static edu.espol.grupo_12.Mark.O;
+import static edu.espol.grupo_12.Mark.X;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -19,17 +16,14 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.text.Font;
 
-/**
- * FXML Controller class
- *
- * @author josue
- */
 public class PInicioController implements Initializable {
     public static int rondasGanadasPC;
     public static int rondasGanadasPlayer;
     public static int rondasParaGanar;
     public static boolean firstPc;
-    public static boolean xPlayer;
+    public static Mark Player;
+    public static Mark Ai;
+    
     @FXML
     private Label lblInfo;
     @FXML
@@ -43,9 +37,6 @@ public class PInicioController implements Initializable {
     @FXML
     private ComboBox<Integer> comboBoxRondas;
 
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         lblInfo.setText("Bienvenido "+App.PlayerPlaying.getUsuario());
@@ -71,9 +62,11 @@ public class PInicioController implements Initializable {
             alert.showAndWait();
         }else{
             if(comboBox.getValue().equals("X")){
-                xPlayer = true;
+                Player = X;
+                Ai = O;
             }else if(comboBox.getValue().equals("O")){
-                xPlayer = false;
+                Player = O;
+                Ai = X;
             }
             rondasGanadasPC = 0;
             rondasGanadasPlayer = 0;
@@ -81,5 +74,4 @@ public class PInicioController implements Initializable {
             App.setRoot("PGame");
         }
     }
-    
 }

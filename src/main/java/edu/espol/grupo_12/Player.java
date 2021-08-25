@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.espol.grupo_12;
 
 import java.io.FileInputStream;
@@ -13,10 +8,6 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-/**
- *
- * @author josue
- */
 public class Player implements Serializable{
     private String nombre;
     private String usuario;
@@ -50,9 +41,7 @@ public class Player implements Serializable{
             jugadoresRegistrados =  (ArrayList<Player>)i.readObject();  // Casteo porque es la unica forma accesible para serealizar.
         }catch(IOException e){
             System.out.println("Error al desserealizar: "+e);
-        } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
-        }
+        } catch (ClassNotFoundException ex){}
     }
 
     public String getNombre() {
