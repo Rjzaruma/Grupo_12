@@ -14,11 +14,11 @@
    <center>
       <GridPane BorderPane.alignment="CENTER">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="115.0" minWidth="10.0" prefWidth="55.0" />
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="185.0" minWidth="10.0" prefWidth="185.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="115.0" minWidth="10.0" prefWidth="48.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="222.0" minWidth="10.0" prefWidth="215.0" />
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="148.0" minWidth="10.0" prefWidth="147.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="106.0" minWidth="10.0" prefWidth="75.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints maxHeight="95.0" minHeight="10.0" prefHeight="44.0" vgrow="SOMETIMES" />
@@ -39,8 +39,15 @@
             <Button mnemonicParsing="false" onAction="#sceneGame" text="Play!" GridPane.columnIndex="3" GridPane.rowIndex="5" />
             <Label text="Elige tu marca:" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <ComboBox fx:id="comboBox" prefHeight="25.0" prefWidth="69.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <Label text="¿A cuantas rondas quieres jugar?" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label prefHeight="17.0" prefWidth="235.0" text="Número de rondas para ganar la partida:" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <ComboBox fx:id="comboBoxRondas" prefHeight="25.0" prefWidth="69.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <Label text="¿Quieres que se muestre ayuda?" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <RadioButton fx:id="ayudaSi" mnemonicParsing="false" text="Si" GridPane.columnIndex="2" GridPane.rowIndex="4">
+               <toggleGroup>
+                  <ToggleGroup fx:id="ayuda" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="ayudaNo" mnemonicParsing="false" selected="true" text="No" toggleGroup="$ayuda" GridPane.columnIndex="3" GridPane.rowIndex="4" />
          </children>
       </GridPane>
    </center>

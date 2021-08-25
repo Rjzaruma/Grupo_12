@@ -23,6 +23,7 @@ public class PInicioController implements Initializable {
     public static boolean firstPc;
     public static Mark Player;
     public static Mark Ai;
+    public static boolean ayudaInterfaz;
     
     @FXML
     private Label lblInfo;
@@ -36,6 +37,12 @@ public class PInicioController implements Initializable {
     private ComboBox<String> comboBox;
     @FXML
     private ComboBox<Integer> comboBoxRondas;
+    @FXML
+    private ToggleGroup ayuda;
+    @FXML
+    private RadioButton ayudaSi;
+    @FXML
+    private RadioButton ayudaNo;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -53,6 +60,11 @@ public class PInicioController implements Initializable {
             firstPc = true;
         }else if(movimiento.getSelectedToggle().equals(playPlayer)){
             firstPc = false;
+        }
+        if(ayuda.getSelectedToggle().equals(ayudaSi)){
+            ayudaInterfaz = true;
+        }else if(ayuda.getSelectedToggle().equals(ayudaNo)){
+            ayudaInterfaz = false;
         }
         if(comboBox.getValue()==null || comboBoxRondas.getValue()==null){
             Alert alert = new Alert(Alert.AlertType.WARNING);

@@ -23,6 +23,12 @@ public class PGameController implements Initializable {
     private BorderPane borderPane;
     @FXML
     private Label lblInformacion;
+    @FXML
+    private Label lblAyuda;
+    @FXML
+    private Label lblInfoPos;
+    @FXML
+    private Label lbl2;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -51,14 +57,27 @@ public class PGameController implements Initializable {
         return gameBoard;
     }
     
-    private void informacionActual(){
+    public void informacionActual(){
         if(boardPlaying.isAiTurn()){ //si es verdadero juega la maquina
-            lblInformacion.setText("Jugador: "+App.PlayerPlaying.getUsuario()+"\n"+"Rondas para ganar: "+String.valueOf(PInicioController.rondasParaGanar)+"\n"+"Turno: Maquina"+"\n"+"Rondas Ganadas:"+"\n"+"PC: "+String.valueOf(PInicioController.rondasGanadasPC)
-            +"\n"+"Jugador: "+String.valueOf(PInicioController.rondasGanadasPlayer));
+            lblInformacion.setText("Jugador: "+App.PlayerPlaying.getUsuario()+"\n"+"Rondas para ganar: -"+String.valueOf(PInicioController.rondasParaGanar)+"-\n"+"Turno: Maquina"+"\n"+"Rondas Ganadas:"+"\n"+"    PC: "+String.valueOf(PInicioController.rondasGanadasPC)
+            +"\n"+"    Jugador: "+String.valueOf(PInicioController.rondasGanadasPlayer));
         }else{
-            lblInformacion.setText("Jugador: "+App.PlayerPlaying.getUsuario()+"\n"+"Rondas para ganar: "+String.valueOf(PInicioController.rondasParaGanar)+"\n"+"Turno: Jugador"+"\n"+"Rondas Ganadas:"+"\n"+"PC: "+String.valueOf(PInicioController.rondasGanadasPC)
-            +"\n"+"Jugador: "+String.valueOf(PInicioController.rondasGanadasPlayer));
+            lblInformacion.setText("Jugador: "+App.PlayerPlaying.getUsuario()+"\n"+"Rondas para ganar: -"+String.valueOf(PInicioController.rondasParaGanar)+"-\n"+"Turno: Jugador"+"\n"+"Rondas Ganadas:"+"\n"+"    PC: "+String.valueOf(PInicioController.rondasGanadasPC)
+            +"\n"+"    Jugador: "+String.valueOf(PInicioController.rondasGanadasPlayer));
         }
+        if(PInicioController.ayudaInterfaz){
+            if(!boardPlaying.isAiTurn()){
+                MiniMax move = new MiniMax(boardPlaying);
+                int r = move.getRow()+1;
+                int c = move.getCol()+1;
+                lbl2.setText("Tu próximo movimiento debe ser en: \n");
+                lblAyuda.setText(move.getBoard().toString());
+                lblInfoPos.setText("    Posición para tu jugada: \n"+"          Fila: "+r+"          Columna: "+c);
+            }
+        }
+        lbl2.setFont(new Font("Times New Roman Bold", 15));
+        lblAyuda.setFont(new Font("Times New Roman Bold", 20));
+        lblInfoPos.setFont(new Font("Times New Roman Bold", 15));
         lblInformacion.setFont(new Font("Times New Roman Bold", 20));
     }
     private void runGameLoop() {
@@ -73,6 +92,7 @@ public class PGameController implements Initializable {
             } else {
                 if (boardPlaying.isAiTurn()) {
                     playAI();
+                    informacionActual();
                 }
             }
         }

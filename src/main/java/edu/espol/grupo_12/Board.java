@@ -136,8 +136,13 @@ public class Board{
     public String toString() {
         StringBuilder strBldr = new StringBuilder();
         for (Mark[] row : board) {
+            strBldr.append('|');
             for (Mark tile : row) {
-                strBldr.append(tile).append(' ');
+                if(tile.estaMarcado())
+                    strBldr.append(' ').append(tile).append(' ').append('|');
+                else{
+                    strBldr.append(' ').append(' ').append(' ').append(' ').append(' ').append('|');
+                }
             }
             strBldr.append("\n");
         }
